@@ -14,6 +14,7 @@
         <SolidColorBrush x:Key="SecondaryColor" Color="#FF03DAC5"/>
         <SolidColorBrush x:Key="BackgroundColor" Color="#FFFFFFFF"/>
         <SolidColorBrush x:Key="TextColor" Color="#FF000000"/>
+        <SolidColorBrush x:Key="AccentColor" Color="#FF0000"/>
 
         <!-- Стиль для заголовков -->
         <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
@@ -164,11 +165,11 @@
             <Border Width="80" Height="80" Background="{StaticResource SecondaryColor}" CornerRadius="40" Margin="5">
                 <TextBlock Text="Лого" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource TextColor}"/>
             </Border>
-            <ProgressBar Name="WeeklyProgressBar" Value="30" Height="30" Width="300" Margin="20,10"
+            <ProgressBar x:Name="WeeklyProgressBar" Value="0" Height="30" Width="300" Margin="20,10"
                          Foreground="{StaticResource PrimaryColor}"/>
         </DockPanel>
 
-        <Border Grid.Row="1" Grid.Column="0" Margin="10" Style="{StaticResource BorderSectionStyle}">
+        <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource BorderSectionStyle}">
             <!-- Основное расписание -->
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -190,13 +191,13 @@
                 </Grid.RowDefinitions>
 
                 <!-- Заголовки дней недели -->
-                <TextBlock Text="Пн" Grid.Column="0" Style="{StaticResource WeekdayTextStyle}"/>
-                <TextBlock Text="Вт" Grid.Column="1" Style="{StaticResource WeekdayTextStyle}"/>
-                <TextBlock Text="Ср" Grid.Column="2" Style="{StaticResource WeekdayTextStyle}"/>
-                <TextBlock Text="Чт" Grid.Column="3" Style="{StaticResource WeekdayTextStyle}"/>
-                <TextBlock Text="Пт" Grid.Column="4" Style="{StaticResource WeekdayTextStyle}"/>
-                <TextBlock Text="Сб" Grid.Column="5" Style="{StaticResource WeekdayTextStyle}"/>
-                <TextBlock Text="Вс" Grid.Column="6" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Mon" Text="Пн" Grid.Column="0" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Tue" Text="Вт" Grid.Column="1" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Wed" Text="Ср" Grid.Column="2" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Thu" Text="Чт" Grid.Column="3" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Fri" Text="Пт" Grid.Column="4" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Sat" Text="Сб" Grid.Column="5" Style="{StaticResource WeekdayTextStyle}"/>
+                <TextBlock x:Name="Sun" Text="Вс" Grid.Column="6" Style="{StaticResource WeekdayTextStyle}"/>
 
                 <!-- Ячейки расписания -->
                 <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource ScheduleCellStyle}"/>
@@ -246,27 +247,12 @@
                         </Style>
                     </ScrollViewer.Resources>
 
-                    <ListBox FontSize="18" BorderThickness="0" Background="Transparent">
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Проект - 20 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Отчёт - 22 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Презентация - 25 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Курс по C# - 30 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Проект - 20 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Отчёт - 22 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Презентация - 25 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Курс по C# - 30 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Проект - 20 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Отчёт - 22 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Презентация - 25 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Проект - 20 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Отчёт - 22 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Презентация - 25 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Проект - 20 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Отчёт - 22 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Презентация - 25 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Курс по C# - 30 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Курс по C# - 30 марта</ListBoxItem>
-                        <ListBoxItem Style="{StaticResource DeadlineItemStyle}">Курс по C# - 30 марта</ListBoxItem>
+                    <ListBox x:Name="DeadlineListBox" FontSize="18" BorderThickness="0" Background="Transparent" ItemsSource="{Binding Deadlines}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DeadlineText}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </ScrollViewer>
 
