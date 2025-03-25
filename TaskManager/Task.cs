@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace TaskManager {
     public class Task {
-        public int Id { get; set; } // Идентификатор задачи
+        public Guid TaskId { get; set; } = Guid.NewGuid(); // Генерация уникального идентификатора
         public required string Title { get; set; } // Заголовок задачи
         public required string Description { get; set; } // Описание задачи
         public DateTime Deadline { get; set; } // Дедлайн задачи
-        public bool IsCompleted { get; set; } // Статус задачи (выполнена или нет)
+        public bool IsCompleted { get; set; } = false; // Статус задачи (выполнена или нет)
         public int UserId { get; set; } // Внешний ключ на пользователя
-        public required User User { get; set; } // Навигационное свойство для пользователя
     }
 }

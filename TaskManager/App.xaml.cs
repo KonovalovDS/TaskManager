@@ -1,10 +1,13 @@
 ﻿using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 namespace TaskManager {
     /// <summary>
@@ -12,57 +15,80 @@ namespace TaskManager {
     /// </summary>
     /// 
     public partial class App : Application {
-
-        public static int taskCounter = 0;
-        public static int complitedTaskCounter = 0;
-
-        public static Dictionary<int, string> data = new Dictionary<int, string>();
-        private static MainWindow window = new MainWindow();
-
-        public static AppDbContext DbContext { get; private set; }
-
-        public class DeadlineItem {
-            public int Id { get; set; }
-            public required string DeadlineText { get; set; }
-        }
-
         public App() {
-            var host = Environment.GetEnvironmentVariable("PG_HOST");
-            var port = Environment.GetEnvironmentVariable("PG_PORT");
-            var username = Environment.GetEnvironmentVariable("PG_USERNAME");
-            var password = Environment.GetEnvironmentVariable("PG_PASSWORD");
-            var database = Environment.GetEnvironmentVariable("PG_DATABASE");
-            var connectionString = $"Host={host};Port={port};Username={username};Password={password};Database={database}";
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseNpgsql(connectionString);
-            DbContext = new AppDbContext(optionsBuilder.Options);
+            //ConnectDB();
+            Data = new Dictionary<Guid, Task>();
+            Order = new List<Guid>();
 
             InitializeComponent();
         }
 
+        public static int userId = 1;
 
-        public static void AddTask(int id, string text) {
-            App.taskCounter++;
-            App.data.Add(id, text);
-            window.UpdateProgressBar();
+        public static int taskCounter = 0;
+        public static int complitedTaskCounter = 0;
+
+        public static Dictionary<Guid, Task> Data { private get; set; }
+        public static List<Guid> Order { private get; set; }
+
+        private MainWindow window;
+
+        struct DbContextStruct {
+            public static AppDbContext DbContext { get; set; }
+            static string host = Environment.GetEnvironmentVariable("PG_HOST");
+            static string port = Environment.GetEnvironmentVariable("PG_PORT");
+            static string username = "TestUser";
+            static string password = "12345678";
+            static string database = "tmdatabase";
+            static public string connectionString = $"Host={host};Port={port};Username={username};Password={password};Database={database}";
         }
 
-        public static void DeleteTask(int id) {
+        void ConnectDB() {
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            optionsBuilder.UseNpgsql(DbContextStruct.connectionString);
+            DbContextStruct.DbContext = new AppDbContext(optionsBuilder.Options);
+            Debug.WriteLine(DbContextStruct.connectionString);
+            try {
+                using (var conn = new NpgsqlConnection(DbContextStruct.connectionString)) {
+                    conn.Open();
+                    using (var cmd = new NpgsqlCommand("SELECT version();", conn)) {
+                        var version = cmd.ExecuteScalar();
+                        Debug.WriteLine($"Подключение успешно! Версия базы данных: {version}");
+                    }
+                }
+            }
+            catch (Exception ex) {
+                Debug.WriteLine($"Ошибка подключения: {ex.Message}");
+            }
+        }
+
+        public void AddTask(string taskTitle, string taskDecription, DateTime TaskDateTime) {
+            taskCounter++;
+            Task newTask = new Task {
+                Title = taskTitle,
+                Description = taskDecription,
+                Deadline = TaskDateTime,
+                UserId = userId
+            };
+            Data.Add(newTask.TaskId, newTask);
+        }
+
+        public void DeleteTask(int id) {
             if (App.taskCounter > 0) { App.taskCounter--; }
-            App.data.Remove(id);
+            //App.data.Remove(id);
             window.UpdateProgressBar();
 
         }
 
-        public static void CompleteTask(int id) {
-            DeleteTask(id);
+        public void CompleteTask(int id) {
+            //DeleteTask(id);
             App.complitedTaskCounter++;
             window.UpdateProgressBar();
         }
 
         private void LoadData() {
-            App.data.Clear();
-            var data = App.DbContext.MyEntities.ToList();
+            App.Data.Clear();
+            var data = App.DbContextStruct.DbContext.MyEntities.ToList();
             foreach (var entity in data) {
                 Console.WriteLine(entity.Name);
             }

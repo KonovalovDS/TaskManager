@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text;
+using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,18 +18,24 @@ namespace TaskManager {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public MainWindow() { 
+        public MainWindow() {
             InitializeComponent();
+            var app = (App)Application.Current;
         }
 
-        public ObservableCollection<DeadlineItem> Deadlines { get; set; } = new ObservableCollection<DeadlineItem>();
+        private App App;
 
         public void UpdateProgressBar() {
             if (App.complitedTaskCounter > App.taskCounter) {
                 Console.WriteLine("Error: complitedTaskCounter > taskCounter");
             }
             else {
-                WeeklyProgressBar.Value = App.complitedTaskCounter / App.taskCounter;
+                if (App.taskCounter == 0) {
+                    WeeklyProgressBar.Value = 30;
+                }
+                else {
+                    WeeklyProgressBar.Value = App.complitedTaskCounter / App.taskCounter;
+                }
             }
         }
 
@@ -39,25 +47,20 @@ namespace TaskManager {
             }
         }
 
-        private void AddButtonClick(object sender, RoutedEventArgs e) {
-            DateTime date = DateTime.Now;
-            //string msg = ;
-            string text = $"{date.Day}.{date.Month} - ";
-            int id = 0;
-            while (App.data.ContainsKey(id)) {
-                id++;
+        private void AddTaskClick(object sender, RoutedEventArgs e) {
+            AddTaskWindow addTaskWindow = new AddTaskWindow();
+            if (addTaskWindow.ShowDialog() == true) {
+                App.AddTask(addTaskWindow.TaskTitle, addTaskWindow.TaskDescription, addTaskWindow.TaskSelectedDate);
             }
-            App.AddTask(id, text);
-            Deadlines.Add(new DeadlineItem { Id = id, DeadlineText = text });
         }
 
         private void DeleteButtonClick(object sender, RoutedEventArgs e) {
             int id = 0;
-            var itemToRemove = Deadlines.FirstOrDefault(item => item.Id == id);
-            if (itemToRemove != null) {
-                App.DeleteTask(id);
-                Deadlines.Remove(itemToRemove);
-            }
+            //var itemToRemove = Deadlines.FirstOrDefault(item => item.Id == id);
+            //if (itemToRemove != null) {
+                //App.DeleteTask(id);
+                //Deadlines.Remove(itemToRemove);
+            //}
         }
 
     }

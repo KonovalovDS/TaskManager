@@ -1,0 +1,82 @@
+﻿<Window x:Class="TaskManager.AddTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Добавить задачу" Width="400" Height="350" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Название -->
+        <TextBlock Grid.Row="0" Grid.Column="0" 
+               Text="Название:" 
+               Style="{StaticResource HeaderTextStyle}"
+               Margin="5,0,5,5"/>
+
+        <TextBox Grid.Row="1" Grid.Column="0" 
+             Name="TitleTextBox" 
+             Style="{StaticResource TextBoxStyle}"
+             BorderBrush="{StaticResource PrimaryColor}"/>
+
+        <!-- Описание -->
+        <TextBlock Grid.Row="2" Grid.Column="0" 
+               Text="Описание:" 
+               Style="{StaticResource HeaderTextStyle}"
+               Margin="5,0,5,5"/>
+
+        <TextBox Grid.Row="3" Grid.Column="0" 
+             Name="DescriptionTextBox" 
+             Style="{StaticResource TextBoxStyle}"
+             BorderBrush="{StaticResource PrimaryColor}"
+             TextWrapping="Wrap"
+             AcceptsReturn="True"
+             MaxHeight="100"
+             VerticalScrollBarVisibility="Auto"/>
+
+        <!-- Дата -->
+        <TextBlock Grid.Row="0" Grid.Column="1" 
+               Text="Дата:"
+               Style="{StaticResource HeaderTextStyle}"
+               Margin="5,0,5,5"/>
+
+        <DatePicker Grid.Row="1" Grid.Column="1" 
+                Name="DatePicker" 
+                Margin="5,0,5,15"
+                MinHeight="30"
+                FontSize="16"
+                Foreground="{StaticResource TextColor}"
+                BorderBrush="{StaticResource PrimaryColor}"
+                BorderThickness="2"
+                
+                SelectedDate="{x:Static sys:DateTime.Today}"/>
+
+        <!-- Кнопки /-->
+        <Button Name="AddButton"
+                Grid.Row="5"
+                Grid.Column="1"
+                Content="Добавить" 
+                Style="{StaticResource PrimaryButtonStyle}"
+                HorizontalAlignment="Center"
+                Click="AddButtonClick"/>
+
+        <Button Name="CancelButton"
+                Grid.Row="5"
+                Grid.Column="0"
+                Content="Отмена" 
+                Style="{StaticResource PrimaryButtonStyle}"
+                HorizontalAlignment="Center"
+                Click="CancelButtonClick"/>
+    </Grid>
+</Window>
