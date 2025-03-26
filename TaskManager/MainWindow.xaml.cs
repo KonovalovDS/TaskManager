@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static TaskManager.App;
 using static System.Net.Mime.MediaTypeNames;
+using System.Reflection;
 
 namespace TaskManager {
     /// <summary>
@@ -72,45 +73,48 @@ namespace TaskManager {
         }
 
         private void CompleteTaskClick(object sender, RoutedEventArgs e) {
-            Guid taskId = getItemId(object sender, RoutedEventArgs e);
-            if (taskId != Guid.Empty)
-                        App.CompleteTask(taskId);
-                        //UpdateProgressBar();
-                    }
+            Guid taskId = getItemId(sender);
+            if (taskId != Guid.Empty) {
+                App.CompleteTask(taskId);
+
+                //UpdateProgressBar();
+            }
         }
 
         private void DeleteButtonClick(object sender, RoutedEventArgs e) {
-
-            int id = 0;
-            //var itemToRemove = Deadlines.FirstOrDefault(item => item.Id == id);
-            //if (itemToRemove != null) {
-                //App.DeleteTask(id);
-                //Deadlines.Remove(itemToRemove);
-            //}
+            Guid taskId = getItemId(sender);
+            if (taskId != Guid.Empty) {
+                App.DeleteTask(taskId);
+                //UpdateProgressBar();
+            }
         }
 
-        private Guid getItemId(object sender, RoutedEventArgs e) {
+        private Guid getItemId(object sender) {
             var button = sender as Button;
             if (button != null) {
+                // Получаем родительский ListBoxItem
                 var listBoxItem = GetParentListBoxItem(button);
                 if (listBoxItem != null) {
+                    // Извлекаем DataContext, который является объектом DeadlineItem
                     var deadlineItem = listBoxItem.DataContext as DeadlineItem;
                     if (deadlineItem != null) {
+                        // Возвращаем Id из DeadlineItem
                         return deadlineItem.Id;
                     }
                 }
             }
-            return Guid.Empty;
+            return Guid.Empty; // Если не удалось найти элемент или он не является DeadlineItem
         }
 
         private ListBoxItem GetParentListBoxItem(DependencyObject child) {
             while (child != null) {
                 child = VisualTreeHelper.GetParent(child);
                 if (child is ListBoxItem listBoxItem)
-                    return listBoxItem;
+                    return listBoxItem; // Возвращаем родительский ListBoxItem
             }
-            return null;
+            return null; // Если родительский элемент не найден
         }
+
 
     }
 }

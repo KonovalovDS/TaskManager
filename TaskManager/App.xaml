@@ -101,20 +101,20 @@
                                     Background="Transparent"
                                     BorderBrush="Transparent"
                                     ToolTip="Отметить как выполненное"
-                                    Click="CompleteTaskClick"> 
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73A;" FontSize="16" />
-                                    </StackPanel>
-                                </Button>
+                                    Click="CompleteTaskClick"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73A;" FontSize="16" />
+                                </StackPanel>
+
                                 <Button Width="25" Height="25" Padding="0"
                                     Background="Transparent"
                                     BorderBrush="Transparent"
                                     ToolTip="Удалить"
-                                    Click="DeleteTaskClick">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="16" />
-                                    </StackPanel>
-                                </Button>
+                                    Click="DeleteTaskClick"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="16" />
+                                </StackPanel>
+
                             </StackPanel>
                         </Grid>
 

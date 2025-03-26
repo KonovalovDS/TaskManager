@@ -98,6 +98,11 @@ namespace TaskManager {
             return false;
         }
 
+        public void ClearData() {
+            Data.Clear();
+            Order.Clear();
+        }
+
         private void LoadData() {
             App.Data.Clear();
             var data = App.DbContextStruct.DbContext.MyEntities.ToList();
