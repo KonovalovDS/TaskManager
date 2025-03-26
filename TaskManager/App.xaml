@@ -97,14 +97,24 @@
                             Background="Transparent"
                             Visibility="Collapsed"
                             x:Name="ActionButtons">
-                                <Button Content="▲" Width="25" Height="25" Padding="0" 
-                                    Background="Transparent" 
+                                <Button Width="25" Height="25" Padding="0"
+                                    Background="Transparent"
                                     BorderBrush="Transparent"
-                                    ToolTip="Переместить выше"/>
-                                <Button Content="▼" Width="25" Height="25" Padding="0" 
-                                    Background="Transparent" 
+                                    ToolTip="Отметить как выполненное"
+                                    Click="CompleteTaskClick"> 
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE73A;" FontSize="16" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Width="25" Height="25" Padding="0"
+                                    Background="Transparent"
                                     BorderBrush="Transparent"
-                                    ToolTip="Переместить ниже"/>
+                                    ToolTip="Удалить"
+                                    Click="DeleteTaskClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE711;" FontSize="16" />
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </Grid>
 

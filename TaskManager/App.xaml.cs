@@ -21,6 +21,7 @@ namespace TaskManager {
             Order = new List<Guid>();
 
             InitializeComponent();
+            window = new MainWindow();
         }
 
         public static int userId = 1;
@@ -62,7 +63,7 @@ namespace TaskManager {
             }
         }
 
-        public void AddTask(string taskTitle, string taskDecription, DateTime TaskDateTime) {
+        public Guid AddTask(string taskTitle, string taskDecription, DateTime TaskDateTime) {
             taskCounter++;
             Task newTask = new Task {
                 Title = taskTitle,
@@ -71,19 +72,30 @@ namespace TaskManager {
                 UserId = userId
             };
             Data.Add(newTask.TaskId, newTask);
+            Order.Add(newTask.TaskId);
+            return newTask.TaskId;
         }
 
-        public void DeleteTask(int id) {
-            if (App.taskCounter > 0) { App.taskCounter--; }
-            //App.data.Remove(id);
-            window.UpdateProgressBar();
-
+        public bool DeleteTask(Guid taskId) {
+            if (Data.ContainsKey(taskId)) {
+                Task task = Data[taskId];
+                Order.Remove(taskId);
+                Data.Remove(taskId);
+                taskCounter--;
+                return true;
+            }
+            return false;
         }
 
-        public void CompleteTask(int id) {
-            //DeleteTask(id);
-            App.complitedTaskCounter++;
-            window.UpdateProgressBar();
+        public bool CompleteTask(Guid taskId) {
+            if (Data.ContainsKey(taskId)) {
+                Data[taskId].IsCompleted = true;
+                Order.Remove(taskId);
+                Order.Add(taskId);
+                complitedTaskCounter++;
+                return true;
+            }
+            return false;
         }
 
         private void LoadData() {
@@ -92,12 +104,14 @@ namespace TaskManager {
             foreach (var entity in data) {
                 Console.WriteLine(entity.Name);
             }
-            window.UpdateProgressBar();
         }
         private void UpdateData() {
             //App.data
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 
 }

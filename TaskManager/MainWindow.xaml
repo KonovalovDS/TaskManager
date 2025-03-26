@@ -114,7 +114,16 @@
                     <ListBox x:Name="DeadlineListBox" FontSize="18" BorderThickness="0" Background="Transparent" ItemsSource="{Binding Deadlines}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding DeadlineText}" />
+                                <!-- Этот стиль применяется к самому ListBoxItem -->
+                                <ListBoxItem Style="{StaticResource DeadlineItemStyle}">
+                                    <StackPanel>
+                                        <!-- Применение стиля только к TextBlock -->
+                                        <TextBlock Text="{Binding DeadlineText}" 
+                                            ToolTip="{Binding DeadlineDescription}" />
+                                        <!-- Скрытие ID -->
+                                        <TextBlock Text="{Binding Id}" Visibility="Collapsed"/>
+                                    </StackPanel>
+                                </ListBoxItem>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
