@@ -8,8 +8,6 @@
         
         Title="Тайм-менеджер" MinHeight="600" MinWidth="1000" WindowState="Maximized">
 
-    
-
     <Window.Background>
         <StaticResource ResourceKey="BackgroundColor"/>
     </Window.Background>
@@ -91,14 +89,15 @@
                 <DockPanel Grid.Row="0">
                     <TextBlock Text="Ближайшие дедлайны" Style="{StaticResource HeaderTextStyle}" DockPanel.Dock="Left"/>
                     <Button Width="30" Height="30" Background="Transparent" BorderThickness="0"
-                    ToolTip="Сортировать дедлайны">
+                    ToolTip="Сортировать дедлайны"
+                    Command="{Binding SortTasksCommand}">
                         <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="18" Text="&#xE72C;"/>
                     </Button>
                 </DockPanel>
 
                 <!-- Прокручиваемая область -->
                 <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
-                      PanningMode="VerticalOnly" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                            PanningMode="VerticalOnly">
                     <ScrollViewer.Resources>
                         <Style TargetType="ScrollBar">
                             <Setter Property="Opacity" Value="0"/>
@@ -111,21 +110,32 @@
                         </Style>
                     </ScrollViewer.Resources>
 
-                    <ListBox x:Name="DeadlineListBox" FontSize="18" BorderThickness="0" Background="Transparent" ItemsSource="{Binding Deadlines}">
+                    <ListBox x:Name="TaskListBox"
+                             ItemsSource="{Binding Tasks}"
+                             FontSize="18"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                             AllowDrop="True">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <!-- Этот стиль применяется к самому ListBoxItem -->
-                                <ListBoxItem Style="{StaticResource DeadlineItemStyle}">
-                                    <StackPanel>
-                                        <!-- Применение стиля только к TextBlock -->
-                                        <TextBlock Text="{Binding DeadlineText}" 
-                                            ToolTip="{Binding DeadlineDescription}" />
-                                        <!-- Скрытие ID -->
-                                        <TextBlock Text="{Binding Id}" Visibility="Collapsed"/>
-                                    </StackPanel>
-                                </ListBoxItem>
+                                <TextBlock Text="{Binding TitleAndDate}"
+                                       FontWeight="Bold"
+                                       Style="{StaticResource TextBlockStyle}">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Background="LightYellow"
+                                             Foreground="Black"
+                                             BorderBrush="Gray"
+                                             BorderThickness="1">
+                                            <TextBlock Text="{Binding Description}" 
+                                               TextWrapping="Wrap"
+                                               Width="200"/>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
+                        
                     </ListBox>
                 </ScrollViewer>
 
@@ -138,22 +148,19 @@
 
                     <!-- Кнопка Добавить -->
                     <Button Content="Добавить"
-                    Grid.Column="0"
-                    Style="{StaticResource PrimaryButtonStyle}"
-                    Margin="5"
-                    Click="AddTaskClick"/>
+                        Grid.Column="0"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Margin="5"
+                        Command="{Binding OpenAddTaskWindowCommand}"/>
 
                     <!-- Кнопка Удалить -->
-                    <Button Content="Удалить"
+                    <Button Content="Редактировать"
                     Grid.Column="1"
                     Style="{StaticResource PrimaryButtonStyle}"
-                    Margin="5"/>
+                    Margin="5"
+                    Command="{Binding EditTaskCommand}"/>
                 </Grid>
-
-                
-
             </Grid>
         </Border>
-
     </Grid>
 </Window>

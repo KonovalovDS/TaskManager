@@ -2,8 +2,43 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        Title="Добавить задачу" Width="400" Height="350" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Добавить задачу" Width="400" Height="350" 
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     
+    
+    <Window.Resources>
+        <Style x:Key="ValidatedTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+            <Style.Triggers>
+                <!-- Если поле не заполнено -->
+                <Trigger Property="Tag" Value="Invalid">
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Trigger>
+                <!-- Если поле заполнено корректно -->
+                <Trigger Property="Tag" Value="Valid">
+                    <Setter Property="BorderBrush" Value="Green"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ValidatedDatePickerStyle" TargetType="DatePicker">
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="5"/>
+            <Style.Triggers>
+                <!-- Если дата не выбрана -->
+                <Trigger Property="SelectedDate" Value="{x:Null}">
+                    <Setter Property="BorderBrush" Value="Red"/>
+                </Trigger>
+                <!-- Если дата выбрана -->
+                <Trigger Property="Tag" Value="Valid">
+                    <Setter Property="BorderBrush" Value="Green"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -27,8 +62,9 @@
 
         <TextBox Grid.Row="1" Grid.Column="0" 
              Name="TitleTextBox" 
-             Style="{StaticResource TextBoxStyle}"
-             BorderBrush="{StaticResource PrimaryColor}"/>
+             Style="{StaticResource ValidatedTextBoxStyle}"
+             Background="{Binding TitleBackground}"
+             Text="{Binding Title, Mode=TwoWay}"/>
 
         <!-- Описание -->
         <TextBlock Grid.Row="2" Grid.Column="0" 
@@ -38,12 +74,13 @@
 
         <TextBox Grid.Row="3" Grid.Column="0" 
              Name="DescriptionTextBox" 
-             Style="{StaticResource TextBoxStyle}"
-             BorderBrush="{StaticResource PrimaryColor}"
+             Style="{StaticResource ValidatedTextBoxStyle}"
+             Background="{Binding DescriptionBackground}"
              TextWrapping="Wrap"
              AcceptsReturn="True"
              MaxHeight="100"
-             VerticalScrollBarVisibility="Auto"/>
+             VerticalScrollBarVisibility="Auto"
+             Text="{Binding Description, Mode=TwoWay}"/>
 
         <!-- Дата -->
         <TextBlock Grid.Row="0" Grid.Column="1" 
@@ -57,19 +94,18 @@
                 MinHeight="30"
                 FontSize="16"
                 Foreground="{StaticResource TextColor}"
-                BorderBrush="{StaticResource PrimaryColor}"
-                BorderThickness="2"
-                
-                SelectedDate="{x:Static sys:DateTime.Today}"/>
+                Background="{Binding DeadlineBackground}"
+                Style="{StaticResource ValidatedDatePickerStyle}"
+                SelectedDate="{Binding Deadline, Mode=TwoWay}"/>
 
-        <!-- Кнопки /-->
+        <!-- Кнопки -->
         <Button Name="AddButton"
                 Grid.Row="5"
                 Grid.Column="1"
                 Content="Добавить" 
                 Style="{StaticResource PrimaryButtonStyle}"
                 HorizontalAlignment="Center"
-                Click="AddButtonClick"/>
+                Command="{Binding AddTaskCommand}"/>
 
         <Button Name="CancelButton"
                 Grid.Row="5"
@@ -77,6 +113,6 @@
                 Content="Отмена" 
                 Style="{StaticResource PrimaryButtonStyle}"
                 HorizontalAlignment="Center"
-                Click="CancelButtonClick"/>
+                Command="{Binding CloseCommand}"/>
     </Grid>
 </Window>
